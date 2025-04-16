@@ -1,3 +1,5 @@
 # NC News Seeding
 
-- Instructions for this sprint can be found at https://l2c.northcoders.com/courses/be/seeding-nc-news
+Database connection
+
+Two .env files will be needed to connect to the correct database. The first is .env.test, connecting to nc_news_test, and the second is .env.development, connecting to nc_news.
