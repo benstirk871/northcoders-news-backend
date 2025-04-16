@@ -1,7 +1,7 @@
 const db = require("../connection")
 const format = require('pg-format')
-const { convertTimestampToDate } = require('./utils');
-const articles = require("../data/test-data/articles");
+const { convertTimestampToDate, createRef } = require('./utils');
+
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db.query(`DROP TABLE IF EXISTS comments`)
@@ -32,7 +32,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       return [topic.slug, topic.description, topic.img_url];
     })
       
-    const topicsInsertStr = format(`INSERT INTO topics(slug, description, img_url) VALUES %L`, formattedTopicData)
+    const topicsInsertStr = format(`INSERT INTO topics(slug, description, img_url) VALUES %L;`, formattedTopicData)
 
     return db.query(topicsInsertStr)
   })
@@ -42,32 +42,53 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       return [user.username, user.name, user.avatar_url];
     })
 
-    const usersInsertString = format(`INSERT INTO users (username, name, avatar_url) VALUES %L`, formattedUserData)
+    const usersInsertString = format(`INSERT INTO users (username, name, avatar_url) VALUES %L;`, formattedUserData)
 
     return db.query(usersInsertString)
   })
   .then(()=>{
-
+        
     const formattedArticleData = articleData.map((article)=>{
-    return [article.title, article.topic, article.author, article.body, convertTimestampToDate(article.created_at).created_at, article.votes, article.article_img_url]
+      const convertedArticleData = convertTimestampToDate(article)
+    
+      return [
+        convertedArticleData.title,
+        convertedArticleData.topic,
+        convertedArticleData.author,
+        convertedArticleData.body,
+        convertedArticleData.created_at,
+        convertedArticleData.votes,
+        convertedArticleData.article_img_url
+      ]
     })
     
-    const articlesInsertString = format(`INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L`, formattedArticleData)
+    const articlesInsertString = format(`INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *;`, formattedArticleData)
 
     return db.query(articlesInsertString)
   })
-  .then(()=>{
-
+  .then((result)=>{
+    
+    const articlesRefObj = createRef(result.rows)
+    
     const formattedCommentData = commentData.map((comment) =>{
-      return [comment.body, comment.votes, comment.author, convertTimestampToDate(comment.created_at).created_at]
+      const convertedCommentData = convertTimestampToDate(comment)
+      
+      return [
+        articlesRefObj[convertedCommentData.article_title], convertedCommentData.body,
+        convertedCommentData.votes,
+        convertedCommentData.author,
+        convertedCommentData.created_at
+      ]
     })
-
-    const commentsInsertString = format(`INSERT INTO comments (body, votes, author, created_at) VALUES %L`, formattedCommentData)
+    
+    const commentsInsertString = format(`INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L RETURNING*;`, formattedCommentData)
     
     return db.query(commentsInsertString)
   })
-
-       
-  
+  .then((commentsResults)=>{
+    console.log(commentsResults)
+  })
+    
 };
+
 module.exports = seed;
