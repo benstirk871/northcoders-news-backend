@@ -33,7 +33,7 @@ return db.query(`SELECT * FROM users`)
 .then(() => {
     return db.query(`SELECT * FROM comments WHERE votes > 10`)
     .then((result) => {
-    console.log(result.rows)
+    //console.log(result.rows)
     })
 })
 
