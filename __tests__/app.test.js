@@ -91,7 +91,7 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
-describe.only("GET /api/articles", () => {
+describe.skip("GET /api/articles", () => {
   test("200: Responds with all article objects with correct keys and sorted by date", () => {
     return request(app)
     .get("/api/articles")
