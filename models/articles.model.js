@@ -14,4 +14,12 @@ const selectArticleByID = (article_id) => {
     })
 }
 
-module.exports = selectArticleByID
+const selectArticles = () => {
+    return db
+    .query(`SELECT * FROM articles ORDER BY created_at DESC`)
+    .then(({rows}) => {
+        return rows
+    })
+}
+
+module.exports = {selectArticleByID, selectArticles}
