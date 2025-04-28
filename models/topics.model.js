@@ -1,10 +1,10 @@
 const db = require("../db/connection")
 
-const selectTopics = (req, res) => {
+const selectTopics = () => {
     return db
     .query(`SELECT * FROM topics`)
     .then(({rows}) => {
-        return rows
+       return rows
     })
 }
 
