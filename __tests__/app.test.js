@@ -3,7 +3,8 @@ const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data")
 const app = require("../app")
-const request = require("supertest")
+const request = require("supertest");
+const toBeSortedBy = require("jest-sorted")
 
 
 beforeEach(() => {
@@ -90,3 +91,30 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
+describe.only("GET /api/articles", () => {
+  test("200: Responds with all article objects with correct keys and sorted by date", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy('created_at', {descending: true})
+
+      expect(articles.length).toEqual(13)
+      articles.forEach((article) => {
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          //comment_count: expect.any(Number)
+        })
+        expect(article).not.toMatchObject({
+          body: expect.any(String)
+        })
+      })
+    })
+  })
+})
