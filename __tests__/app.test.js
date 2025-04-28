@@ -26,3 +26,31 @@ describe("GET /api", () => {
   });
 });
 
+describe.skip("Non-existant endpoint", () => {
+  test("404: Responds with an error if the endpoint does not exist", () => {
+    return request(app)
+    .get("/api/notAnEndpoint")
+    .expect(404)
+    .then(({body: {msg}}) => {
+    expect(msg).toEqual("Endpoint not found")
+    })
+  })
+})
+
+describe("GET /api/topics", () => {
+  test("200: Responds with an array of topic objects", () => {
+    return request(app)
+    .get("/api/topics")
+    .expect(200)
+    .then(({body: {topics}}) => {
+      expect(topics.length).toEqual(3)
+      topics.forEach((topic) => {
+        expect(topic).toMatchObject({
+          description: expect.any(String),
+          img_url: expect.any(String)
+        })
+      })
+    })
+  })
+})
+  
