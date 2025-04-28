@@ -85,10 +85,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
     
     return db.query(commentsInsertString)
   })
-  .then((commentsResults)=>{
-    console.log(commentsResults)
-  })
-    
+      
 };
 
 module.exports = seed;
