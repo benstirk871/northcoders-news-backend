@@ -91,7 +91,7 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
-describe.skip("GET /api/articles", () => {
+describe("GET /api/articles", () => {
   test("200: Responds with all article objects with correct keys and sorted by date", () => {
     return request(app)
     .get("/api/articles")
@@ -109,7 +109,7 @@ describe.skip("GET /api/articles", () => {
           created_at: expect.any(String),
           votes: expect.any(Number),
           article_img_url: expect.any(String),
-          //comment_count: expect.any(Number)
+          comment_count: expect.any(Number)
         })
         expect(article).not.toMatchObject({
           body: expect.any(String)
@@ -118,3 +118,45 @@ describe.skip("GET /api/articles", () => {
     })
   })
 })
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: responds with all comment objects corresponding with the article ID", () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({body: {comments}}) => {
+      expect(comments).toBeSortedBy('created_at', {ascending: true})
+
+      expect(comments.length).toEqual(11)
+
+        comments.forEach((comment) => {
+          expect(comment.article_id).toEqual(1)
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            
+          })
+        })
+    })
+  })
+  test("404: Responds with 404 when provided a valid article_id that is out of range", () => {
+    return request(app)
+    .get("/api/articles/1000/comments")
+    .expect(404)
+    .then(({body: {msg}})=> {
+      expect(msg).toEqual("No comments with article_id of 1000")
+    })
+  })
+  test("400: Responds with 400 when provided an invalid article_id", () => {
+    return request(app)
+    .get("/api/articles/invalidArticleID/comments")
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+})
+  
