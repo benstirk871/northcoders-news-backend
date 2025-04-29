@@ -3,8 +3,9 @@ const app = express()
 const endpointsJson = require("./endpoints.json")
 const getTopics = require("./controllers/topics.controller")
 const {getArticleByID, getArticles} = require("./controllers/articles.controller")
-const getCommentByArticleId = require("./controllers/comments.controller")
+const {getCommentByArticleId, postCommentByArticleId} = require("./controllers/comments.controller")
 
+app.use(express.json())
 
 app.get("/api", (req, res) => {
     res.status(200).send({endpoints: endpointsJson})
@@ -18,11 +19,14 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getCommentByArticleId)
 
+app.post("/api/articles/:article_id/comments", postCommentByArticleId)
+
 app.all("/*splat", (req, res) => {
     res.status(404).send({msg: "Endpoint not found"})
 })
 
 app.use((err, req, res, next) => {
+    
     if(err.code === "22P02"){
         res.status(400).send({msg: "Bad request"})
     }else if(err.status && err.msg){

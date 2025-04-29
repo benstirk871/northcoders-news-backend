@@ -159,4 +159,91 @@ describe("GET /api/articles/:article_id/comments", () => {
     })
   })
 })
-  
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Responds with the newly added comment", () => {
+    const newComment = {
+      username: "lurker",
+      body: "New comment"
+    }
+
+   return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(201)
+    .then(({body: {newlyPostedComment}}) => {
+       expect(newlyPostedComment).toMatchObject({
+        comment_id: expect.any(Number),
+        article_id: 1,
+        body: "New comment",
+        votes: expect.any(Number),
+        author: "lurker",
+        created_at: expect.any(String)
+      })
+    })
+  })
+  test("404: Responds with 404 when attempting to add a comment to a valid article_id that is out of range", () => {
+    const newComment = {
+      username: "lurker",
+      body: "New comment"
+    }
+    return request(app)
+    .post("/api/articles/1000/comments")
+    .send(newComment)
+    .expect(404)
+    .then(({body: {msg}})=> {
+      expect(msg).toEqual("No article with article_id of 1000")
+    })
+  })
+  test("404: Responds with 404 if the provided user does not exist", () => {
+    const newComment = {
+      username: "randomUsername",
+      body: "New comment"
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(404)
+    .then(({body: {msg}})=> {
+      expect(msg).toEqual("User does not exist")
+    })
+  })
+  test("400: Responds with 400 when attempting to add a comment to an invalid article_id", () => {
+    const newComment = {
+      username: "lurker",
+      body: "New comment"
+    }
+    return request(app)
+    .post("/api/articles/invalidArticleID/comments")
+    .send(newComment)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+  test("400: Responds with 400 when attempting to add a comment with an invalid post object", () => {
+    const newComment = {
+      username: "lurker",
+      body: 5
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+  test("400: Responds with 400 when attempting to add a comment with an invalid post object", () => {
+    const newComment = {
+      username: "lurker",
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+})
