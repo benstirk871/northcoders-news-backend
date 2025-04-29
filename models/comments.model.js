@@ -1,5 +1,5 @@
 const db = require("../db/connection")
-
+const {selectArticleByID} = require("../models/articles.model")
 
 const selectCommentsByArticleId = (article_id) => {
     return db
@@ -15,4 +15,31 @@ const selectCommentsByArticleId = (article_id) => {
     })
 }
 
-module.exports = selectCommentsByArticleId;
+const insertIntoComments = (article_id, body, username) => {
+    if(typeof body === 'string' && body.length > 0){
+        return Promise.all([selectArticleByID(article_id), checkUsernameExists(username)])
+        .then(() => {
+            return db
+            .query(`INSERT INTO comments (article_id, body, author) VALUES($1, $2, $3) RETURNING*`, [article_id, body, username])
+        })
+        .then(({rows}) =>{
+            return rows[0]
+        })
+    } else {
+        return Promise.reject({status: 400, msg: "Bad request"})
+    }  
+}
+
+const checkUsernameExists = (username) => {
+    return db
+    .query(`SELECT * FROM users WHERE username = $1`, [username])
+    .then((result) => {
+        if (result.rows.length === 0){
+            return Promise.reject({status: 404, msg: "User does not exist"})
+        } else {
+            return true
+        }
+    })
+}
+
+module.exports = {selectCommentsByArticleId, insertIntoComments};
