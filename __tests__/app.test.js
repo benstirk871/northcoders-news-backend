@@ -160,7 +160,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   })
 })
 
-describe("POST /api/articles/:article_id/comments", () => {
+describe.only("POST /api/articles/:article_id/comments", () => {
   test("201: Responds with the newly added comment", () => {
     const newComment = {
       username: "lurker",
@@ -241,6 +241,89 @@ describe("POST /api/articles/:article_id/comments", () => {
     return request(app)
     .post("/api/articles/1/comments")
     .send(newComment)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+})
+
+describe.only("PATCH /api/articles/:article_id", () => {
+  test("200: Responds with the updated article where votes are increased", () => {
+    const newVote = {
+      inc_votes: 5
+    }
+
+    return request(app)
+    .patch("/api/articles/1")
+    .send(newVote)
+    .expect(200)
+    .then(({body: {updatedArticle}}) => {
+      expect(updatedArticle).toMatchObject({
+        article_id: 1,
+        title: expect.any(String),
+        topic: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        created_at: expect.any(String),
+        votes: 105,
+        article_img_url: expect.any(String)
+      })
+    })
+  })
+  test("200: Responds with the updated article where votes are decreased", () => {
+    const newVote = {
+      inc_votes: -5
+    }
+
+    return request(app)
+    .patch("/api/articles/1")
+    .send(newVote)
+    .expect(200)
+    .then(({body: {updatedArticle}}) => {
+      expect(updatedArticle).toMatchObject({
+        article_id: 1,
+        title: expect.any(String),
+        topic: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        created_at: expect.any(String),
+        votes: 95,
+        article_img_url: expect.any(String)
+      })
+    })
+  })
+  test("404: Responds with 404 when attempting to update a valid article_id that is out of range", () => {
+    const newVote = {
+      inc_votes: -5
+    }
+    return request(app)
+    .patch("/api/articles/1000")
+    .send(newVote)
+    .expect(404)
+    .then(({body: {msg}})=> {
+      expect(msg).toEqual("No article with article_id of 1000")
+    })
+  })
+  test("400: Responds with 400 when attempting to update an invalid article_id", () => {
+    const newVote = {
+      inc_votes: -5
+    }
+    return request(app)
+    .patch("/api/articles/invalidArticleID")
+    .send(newVote)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+  test("400: Responds with 400 when attempting to update with an invalid patch object", () => {
+    const newVote = {
+      inc_votes: "10"
+    }
+    return request(app)
+    .patch("/api/articles/1")
+    .send(newVote)
     .expect(400)
     .then(({body: {msg}}) => {
       expect(msg).toEqual("Bad request")

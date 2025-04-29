@@ -25,7 +25,7 @@
     }
   },
   "GET /api/articles/:article_id": {
-    "description": "Responds with the article correspondding to the provided article_id",
+    "description": "Responds with the article corresponding to the provided article_id",
     "exampleResponse": [{
       "article_id": 2,
       "title": "Sony Vaio; or, The Laptop",
@@ -73,5 +73,36 @@
         "created_at": "2020-03-02T07:10:00.000Z"
       }
      ]
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "Allows new comments to be added to an article by providing the article ID and new comment, and returns the newly posted comment",
+    "Acceptable post object format": {
+      "username": "lurker (Must be a pre-existing user",
+      "body": "New comment"
+    },
+    "ExampleResponse": {
+      "comment_id": 19,
+      "article_id": 1,
+      "body": "New comment",
+      "votes": 0,
+      "author": "lurker",
+      "created_at": "2025-04-29T14:59:50.293Z"
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "Allows existing articles' vote count to be updated, and returns the updated article",
+    "Acceptable patch object format": {
+      "inc_votes": "Integer"
+    },
+    "ExampleResponse": {
+      "article_id": 1,
+      "title": "Living in the shadow of a great man",
+      "topic": "mitch",
+      "author": "butter_bridge",
+      "body": "I find this existence challenging",
+      "created_at": "2020-07-09T20:11:00.000Z",
+      "votes": 105,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
   }
 }
