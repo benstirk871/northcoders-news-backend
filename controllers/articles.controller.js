@@ -26,7 +26,6 @@ const patchArticleByID = (req, res, next) => {
     
     return updateArticles(article_id, inc_votes)
     .then((updatedArticle) => {
-        console.log(updatedArticle)
         res.status(200).send({updatedArticle})
     })
 
