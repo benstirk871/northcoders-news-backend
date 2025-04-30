@@ -12,6 +12,7 @@ const {
     postCommentByArticleId, 
     removeCommentsByID
 } = require("./controllers/comments.controller")
+const getUsers = require("./controllers/users.controller")
 
 app.use(express.json())
 
@@ -32,6 +33,8 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId)
 app.patch("/api/articles/:article_id", patchArticleByID)
 
 app.delete("/api/comments/:comment_id", removeCommentsByID)
+
+app.get("/api/users", getUsers)
 
 app.all("/*splat", (req, res) => {
     res.status(404).send({msg: "Endpoint not found"})

@@ -366,5 +366,23 @@ describe("DELETE /api/comments/:comment_id", () => {
       expect(msg).toEqual("Bad request")
     })
   })
+})
 
+describe("GET /api/users", () => {
+  test("200: Responds with all user objects with keys of username, name and avatar_url", () => {
+   return request(app)
+    .get("/api/users")
+    .expect(200)
+    .then(({body: {users}}) => {
+      expect(users.length).toEqual(4)
+
+      users.forEach((user) => {
+        expect(user).toMatchObject({
+          username: expect.any(String),
+          name: expect.any(String),
+          avatar_url: expect.any(String)
+        })
+      })
+    })
+  })
 })
