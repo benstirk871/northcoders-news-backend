@@ -64,4 +64,4 @@ module.exports = {
     selectCommentsByArticleId, 
     insertIntoComments, 
     deleteCommentsByID
-};
+}

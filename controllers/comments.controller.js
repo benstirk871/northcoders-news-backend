@@ -4,7 +4,7 @@ const {
     deleteCommentsByID
 } = require("../models/comments.model")
 
-const getCommentByArticleId = (req, res, next) => {
+const getCommentsByArticleId = (req, res, next) => {
     const {article_id} = req.params
 
     return selectCommentsByArticleId(article_id)
@@ -36,8 +36,10 @@ const removeCommentsByID = (req, res, next) => {
     
 }
 
+
+
 module.exports = {
-    getCommentByArticleId, 
+    getCommentsByArticleId, 
     postCommentByArticleId, 
     removeCommentsByID
 }

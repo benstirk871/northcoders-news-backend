@@ -8,7 +8,7 @@ const {
     patchArticleByID
 } = require("./controllers/articles.controller")
 const {
-    getCommentByArticleId, 
+    getCommentsByArticleId, 
     postCommentByArticleId, 
     removeCommentsByID
 } = require("./controllers/comments.controller")
@@ -26,7 +26,7 @@ app.get("/api/articles/:article_id", getArticleByID)
 
 app.get("/api/articles", getArticles)
 
-app.get("/api/articles/:article_id/comments", getCommentByArticleId)
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 app.post("/api/articles/:article_id/comments", postCommentByArticleId)
 

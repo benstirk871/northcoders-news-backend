@@ -62,7 +62,8 @@
       "body": "I find this existence challenging",
       "created_at": "2020-10-16T05:03:00.000Z",
       "votes": 100,
-      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      "comment_count": 11
     }]
   },
   "GET /api/articles/:article_id/comments": {
@@ -106,7 +107,7 @@
     "description": "Allows new comments to be added to an article by providing the article ID and new comment, and returns the newly posted comment",
     "Acceptable post object format": {
       "username": "lurker (Must be a pre-existing user)",
-      "body": "New comment"
+      "body": "New comment (Must be a string)"
     },
     "ExampleResponse": {
       "comment_id": 19,

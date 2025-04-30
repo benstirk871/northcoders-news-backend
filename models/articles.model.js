@@ -44,8 +44,8 @@ const selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
         queryStr += ` ORDER BY ${sort_by}`
     }
 
-    const validOrders = ["ASC", "DESC"]
-    if (!validOrders.includes(order.toUpperCase())){
+    const validOrderQueries = ["ASC", "DESC"]
+    if (!validOrderQueries.includes(order.toUpperCase())){
         return Promise.reject({status: 400, msg: "Invalid order query"})
     } else {
         queryStr += ` ${order}`
@@ -72,6 +72,8 @@ const updateArticles = (article_id, inc_votes) => {
         return Promise.reject({status: 400, msg: "Bad request"})
     }    
 }
+
+
 
 module.exports = {
     selectArticleByID, 

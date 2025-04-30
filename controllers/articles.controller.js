@@ -33,10 +33,11 @@ const patchArticleByID = (req, res, next) => {
     .then((updatedArticle) => {
         res.status(200).send({updatedArticle})
     })
-
+    .catch(next)
 }
 
 module.exports = {
     getArticleByID, 
     getArticles, 
-    patchArticleByID}
+    patchArticleByID
+}
