@@ -57,18 +57,19 @@ describe("GET /api/topics", () => {
 describe("GET /api/articles/:article_id", () => {
   test("200: Responds with the corresponding article object", () => {
     return request(app)
-    .get("/api/articles/2")
+    .get("/api/articles/1")
     .expect(200)
     .then(({body: {article}}) => {
       expect(article).toMatchObject({
-        article_id: 2,
+        article_id: 1,
         title: expect.any(String),
         topic: expect.any(String),
         author: expect.any(String),
         body: expect.any(String),
         created_at: expect.any(String),
         votes: expect.any(Number),
-        article_img_url: expect.any(String)
+        article_img_url: expect.any(String),
+        comment_count: 11
       })
     })
   })
@@ -90,7 +91,7 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
-describe.only("GET /api/articles", () => {
+describe("GET /api/articles", () => {
   test("200: Responds with all article objects with correct keys and sorted by created_at descending by default", () => {
     return request(app)
     .get("/api/articles")
