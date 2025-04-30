@@ -14,11 +14,23 @@ const selectArticleByID = (article_id) => {
     })
 }
 
-const selectArticles = (sort_by = "created_at", order = "DESC") => {
+const selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
     let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
     COUNT(comments.comment_id):: INT AS comment_count
-    FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id`
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id`
+
+    const topicQueryStr = ` WHERE articles.topic = '${topic}'`
+    const validTopicQueries = ["mitch", "cats", "paper"]
+    if(topic && validTopicQueries.includes(topic)){
+        queryStr += topicQueryStr
+    }
+    if(topic && !validTopicQueries.includes(topic)){
+        return Promise.reject({status: 400, msg: "Invalid topic query"})
+    }
+
+    const groupByStr = ` GROUP BY articles.article_id`
+    queryStr += groupByStr
 
     const validSortByQueries = ["created_at", "article_id", "votes", "comment_count"]
     if (!validSortByQueries.includes(sort_by)){
@@ -33,7 +45,6 @@ const selectArticles = (sort_by = "created_at", order = "DESC") => {
     } else {
         queryStr += ` ${order}`
     }
-
 
     return db
     .query(queryStr)
