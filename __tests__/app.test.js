@@ -120,7 +120,7 @@ describe("GET /api/articles", () => {
 })
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test("200: responds with all comment objects corresponding with the article ID", () => {
+  test("200: Responds with all comment objects corresponding with the article ID", () => {
     return request(app)
     .get("/api/articles/1/comments")
     .expect(200)
@@ -137,7 +137,6 @@ describe("GET /api/articles/:article_id/comments", () => {
             created_at: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
-            
           })
         })
     })
@@ -160,7 +159,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   })
 })
 
-describe.only("POST /api/articles/:article_id/comments", () => {
+describe("POST /api/articles/:article_id/comments", () => {
   test("201: Responds with the newly added comment", () => {
     const newComment = {
       username: "lurker",
@@ -221,7 +220,7 @@ describe.only("POST /api/articles/:article_id/comments", () => {
       expect(msg).toEqual("Bad request")
     })
   })
-  test("400: Responds with 400 when attempting to add a comment with an invalid post object", () => {
+  test("400: Responds with 400 when attempting to add a comment with a post object with invalid data types", () => {
     const newComment = {
       username: "lurker",
       body: 5
@@ -234,7 +233,7 @@ describe.only("POST /api/articles/:article_id/comments", () => {
       expect(msg).toEqual("Bad request")
     })
   })
-  test("400: Responds with 400 when attempting to add a comment with an invalid post object", () => {
+  test("400: Responds with 400 when attempting to add a comment with a post object with missing data", () => {
     const newComment = {
       username: "lurker",
     }
@@ -248,7 +247,7 @@ describe.only("POST /api/articles/:article_id/comments", () => {
   })
 })
 
-describe.only("PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
   test("200: Responds with the updated article where votes are increased", () => {
     const newVote = {
       inc_votes: 5
@@ -317,7 +316,7 @@ describe.only("PATCH /api/articles/:article_id", () => {
       expect(msg).toEqual("Bad request")
     })
   })
-  test("400: Responds with 400 when attempting to update with an invalid patch object", () => {
+  test("400: Responds with 400 when attempting to update with a patch object with invalid data types", () => {
     const newVote = {
       inc_votes: "10"
     }
@@ -329,4 +328,43 @@ describe.only("PATCH /api/articles/:article_id", () => {
       expect(msg).toEqual("Bad request")
     })
   })
+  test("400: Responds with 400 when attempting to update with a patch object with missing data", () => {
+    const newVote = {
+      inc_votes: ''
+    }
+
+    return request(app)
+    .patch("/api/articles/1")
+    .send(newVote)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+})
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Responds with 204 and deletes the corresponding comments", () => {
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    
+  })
+  test("404: Responds with 404 when provided a valid comment_id that is out of range", () => {
+    return request(app)
+    .delete("/api/comments/1000")
+    .expect(404)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Comment does not exist")
+    })
+  })
+  test("400: Responds with 400 when provided an invalid comment_id", () => {
+    return request(app)
+    .delete("/api/comments/invalidCommentID")
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+
 })

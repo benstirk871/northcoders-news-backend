@@ -36,10 +36,32 @@ const checkUsernameExists = (username) => {
     .then((result) => {
         if (result.rows.length === 0){
             return Promise.reject({status: 404, msg: "User does not exist"})
-        } else {
-            return true
         }
     })
 }
 
-module.exports = {selectCommentsByArticleId, insertIntoComments};
+const deleteCommentsByID = (comment_id) => {
+    return checkCommentExists(comment_id)
+    .then(() => {
+        return db
+        .query(`DELETE FROM comments WHERE comment_id = $1`, [comment_id])
+    })
+}
+
+const checkCommentExists = (comment_id) => {
+    return db
+    .query(`SELECT comment_id FROM comments WHERE comment_id = $1`, [comment_id])
+    .then(({rows}) => {
+        if (rows.length === 0){
+            return Promise.reject({status: 404, msg: "Comment does not exist"})
+        } 
+    })
+}
+
+
+
+module.exports = {
+    selectCommentsByArticleId, 
+    insertIntoComments, 
+    deleteCommentsByID
+};

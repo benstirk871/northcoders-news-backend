@@ -1,7 +1,5 @@
 const selectTopics = require("../models/topics.model")
 
-
-
 const getTopics = (req, res) => {
     return selectTopics()
     .then((topics) => {
