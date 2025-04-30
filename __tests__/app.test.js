@@ -4,8 +4,7 @@ const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data")
 const app = require("../app")
 const request = require("supertest");
-const toBeSortedBy = require("jest-sorted")
-
+const toBeSortedBy = require("jest-sorted");
 
 beforeEach(() => {
   return seed(data)
@@ -92,7 +91,7 @@ describe("GET /api/articles/:article_id", () => {
 })
 
 describe("GET /api/articles", () => {
-  test("200: Responds with all article objects with correct keys and sorted by date", () => {
+  test("200: Responds with all article objects with correct keys and sorted by created_at descending by default", () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
@@ -115,6 +114,97 @@ describe("GET /api/articles", () => {
           body: expect.any(String)
         })
       })
+    })
+  })
+  test("200: Can accept a sort_by query without an order query (defaults to descending)", () => {
+    return request(app)
+    .get("/api/articles?sort_by=votes")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy('votes', {descending: true})
+
+      expect(articles.length).toEqual(13)
+      articles.forEach((article) => {
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number)
+        })
+        expect(article).not.toMatchObject({
+          body: expect.any(String)
+        })
+      })
+    })
+  })
+  test("200: Can accept an order query without a sort_by query (defaults to created_at)", () => {
+    return request(app)
+    .get("/api/articles?order=asc")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy('created_at', {ascending: true})
+
+      expect(articles.length).toEqual(13)
+      articles.forEach((article) => {
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number)
+        })
+        expect(article).not.toMatchObject({
+          body: expect.any(String)
+        })
+      })
+    })
+  })
+  test("200: Can accept sort and order queries concurrently", () => {
+    return request(app)
+    .get("/api/articles?sort_by=comment_count&order=asc")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy('comment_count', {ascending: true})
+
+      expect(articles.length).toEqual(13)
+      articles.forEach((article) => {
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number)
+        })
+        expect(article).not.toMatchObject({
+          body: expect.any(String)
+        })
+      })
+    })
+  })
+  test("400: Responds with 400 when the sort query is invalid", () => {
+    return request(app)
+    .get("/api/articles?sort_by=invalid")
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Invalid sort query")
+    })
+  })
+  test("400: Responds with 400 when the order query is invalid", () => {
+    return request(app)
+    .get("/api/articles?order=invalid")
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Invalid order query")
     })
   })
 })
@@ -194,7 +284,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       expect(msg).toEqual("No article with article_id of 1000")
     })
   })
-  test("404: Responds with 404 if the provided user does not exist", () => {
+  test("404: Responds with 404 when the provided user does not exist", () => {
     const newComment = {
       username: "randomUsername",
       body: "New comment"

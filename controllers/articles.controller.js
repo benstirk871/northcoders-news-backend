@@ -14,13 +14,14 @@ const getArticleByID = (req, res, next) => {
     .catch(next)
 }
 
-const getArticles = (req, res) => {
-    
-    return selectArticles()
-    .then((articles) => {
+const getArticles = (req, res, next) => {
+    const {sort_by, order} = req.query
         
+    return selectArticles(sort_by, order)
+    .then((articles) => {
         res.status(200).send({articles})
     })
+    .catch(next)
 }
 
 const patchArticleByID = (req, res, next) => {
