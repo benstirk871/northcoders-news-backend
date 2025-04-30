@@ -41,4 +41,8 @@ const updateArticles = (article_id, inc_votes) => {
     }    
 }
 
-module.exports = {selectArticleByID, selectArticles, updateArticles}
+module.exports = {
+    selectArticleByID, 
+    selectArticles, 
+    updateArticles
+}

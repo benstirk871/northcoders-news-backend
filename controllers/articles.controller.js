@@ -1,4 +1,8 @@
-const {selectArticleByID, selectArticles, updateArticles} = require("../models/articles.model")
+const {
+    selectArticleByID, 
+    selectArticles, 
+    updateArticles
+} = require("../models/articles.model")
 
 const getArticleByID = (req, res, next) => {
     const {article_id} = req.params;
@@ -31,4 +35,7 @@ const patchArticleByID = (req, res, next) => {
 
 }
 
-module.exports = {getArticleByID, getArticles, patchArticleByID}
+module.exports = {
+    getArticleByID, 
+    getArticles, 
+    patchArticleByID}
