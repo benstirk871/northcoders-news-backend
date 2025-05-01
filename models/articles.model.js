@@ -26,34 +26,46 @@ const selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
     LEFT JOIN comments ON articles.article_id = comments.article_id`
 
     const topicQueryStr = ` WHERE articles.topic = '${topic}'`
-    const validTopicQueries = ["mitch", "cats", "paper", "coding", "football", "cooking"]
-    if(topic && validTopicQueries.includes(topic)){
-        queryStr += topicQueryStr
-    }
-    if(topic && !validTopicQueries.includes(topic)){
-        return Promise.reject({status: 400, msg: "Invalid topic query"})
-    }
-
-    const groupByStr = ` GROUP BY articles.article_id`
-    queryStr += groupByStr
-
-    const validSortByQueries = ["created_at", "article_id", "votes", "comment_count"]
-    if (!validSortByQueries.includes(sort_by)){
-        return Promise.reject({status: 400, msg: "Invalid sort query"})
-    } else {
-        queryStr += ` ORDER BY ${sort_by}`
-    }
-
-    const validOrderQueries = ["ASC", "DESC"]
-    if (!validOrderQueries.includes(order.toUpperCase())){
-        return Promise.reject({status: 400, msg: "Invalid order query"})
-    } else {
-        queryStr += ` ${order}`
-    }
-
+    const validTopicQueries = []
+        
     return db
-    .query(queryStr)
-       .then(({rows}) => {
+    .query(`SELECT slug FROM topics`)
+    .then(({rows}) => {
+        rows.forEach((row) => {
+            validTopicQueries.push(row.slug)
+        })
+    })
+    .then(() => {
+
+        if(topic && validTopicQueries.includes(topic)){
+            queryStr += topicQueryStr
+        }
+        if(topic && !validTopicQueries.includes(topic)){
+            return Promise.reject({status: 400, msg: "Invalid topic query"})
+        }
+        
+        const groupByStr = ` GROUP BY articles.article_id`
+        queryStr += groupByStr
+        
+        const validSortByQueries = ["created_at", "article_id", "votes", "comment_count"]
+        if (!validSortByQueries.includes(sort_by)){
+            return Promise.reject({status: 400, msg: "Invalid sort query"})
+        } else {
+            queryStr += ` ORDER BY ${sort_by}`
+        }
+        
+        const validOrderQueries = ["ASC", "DESC"]
+        if (!validOrderQueries.includes(order.toUpperCase())){
+            return Promise.reject({status: 400, msg: "Invalid order query"})
+        } else {
+            queryStr += ` ${order}`
+        }
+    })
+    .then(() => {
+        return db
+        .query(queryStr)
+    })
+    .then(({rows}) => {
         return rows
     })
 }

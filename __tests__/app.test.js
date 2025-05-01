@@ -235,6 +235,14 @@ describe("GET /api/articles", () => {
         })
       })
     })
+    test("200: Responds with an empty articles array if the given topic does not have any articles", () => {
+      return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({body: {articles}}) => {
+        expect(articles.length).toEqual(0)
+      })
+    })
     test("200: Can accept sort, order and topic queries concurrently", () => {
       return request(app)
       .get("/api/articles?topic=mitch&sort_by=comment_count&order=asc")
