@@ -14,7 +14,7 @@
     "queries": {"This endpoint can take three queries, sort_by, order and topic": {
       "sort_by: specify a column to order the results by: accepts": ["created_at", "article_id", "votes", "comment_count"],
       "order: specify ascending or descending: accepts": ["asc", "desc", "(not case sensitive)"],
-      "topic: responds with articles associated with the specified topic: accepts": ["mitch", "cats", "paper"]
+      "topic: responds with articles associated with the specified topic: accepts": ["mitch", "cats", "paper", "coding", "football", "cooking"]
       }
     },      
     "exampleResponse": {

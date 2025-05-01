@@ -26,7 +26,7 @@ const selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
     LEFT JOIN comments ON articles.article_id = comments.article_id`
 
     const topicQueryStr = ` WHERE articles.topic = '${topic}'`
-    const validTopicQueries = ["mitch", "cats", "paper"]
+    const validTopicQueries = ["mitch", "cats", "paper", "coding", "football", "cooking"]
     if(topic && validTopicQueries.includes(topic)){
         queryStr += topicQueryStr
     }
