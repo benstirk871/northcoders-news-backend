@@ -19,7 +19,6 @@ const getArticles = (req, res, next) => {
             
     return selectArticles(sort_by, order, topic)
     .then((articles) => {
-        console.log(article)
         res.status(200).send({articles})
     })
     .catch(next)
