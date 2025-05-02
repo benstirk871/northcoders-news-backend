@@ -235,7 +235,7 @@ describe("GET /api/articles", () => {
         })
       })
     })
-    test("200: Responds with an empty articles array if the given topic does not have any articles", () => {
+    test("200: Responds with an empty articles array if the given topic is valid but does not have any articles", () => {
       return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
