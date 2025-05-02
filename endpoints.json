@@ -135,6 +135,20 @@
       "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
     }
   },
+  "PATCH /api/comments/:comment_id": {
+    "description": "Allows existing comments' vote count to be updated, and returns the updated comment",
+    "Acceptable patch object format": {
+      "inc_votes": "Integer"
+    },
+    "exampleResponse": {
+      "comment_id": 1,
+      "article_id": 9,
+      "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      "votes": 21,
+      "author": "butter_bridge",
+      "created_at": "2020-04-06T12:17:00.000Z"
+    }
+  },
   "DELETE /api/comments/:comment_id": {
     "description": "Allows all comments with the specified comment id to be deleted"
   },

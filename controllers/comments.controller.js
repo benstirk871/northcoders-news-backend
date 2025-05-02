@@ -1,7 +1,8 @@
 const {
     selectCommentsByArticleId, 
     insertIntoComments, 
-    deleteCommentsByID
+    deleteCommentsByID,
+    updateCommentByID
 } = require("../models/comments.model")
 
 const getCommentsByArticleId = (req, res, next) => {
@@ -15,6 +16,7 @@ const getCommentsByArticleId = (req, res, next) => {
 }
 
 const postCommentByArticleId = (req, res, next) => {
+    
     const {article_id} = req.params
     const {body, username} = req.body
 
@@ -33,7 +35,18 @@ const removeCommentsByID = (req, res, next) => {
         res.status(204).send({})
     })
     .catch(next)
+}
+
+const patchCommentByID = (req, res, next) => {
     
+    const {comment_id} = req.params
+    const {inc_votes} = req.body
+
+    return updateCommentByID(comment_id, inc_votes)
+    .then((updatedComment) => {
+        res.status(200).send({updatedComment})
+    })
+    .catch(next)
 }
 
 
@@ -41,5 +54,6 @@ const removeCommentsByID = (req, res, next) => {
 module.exports = {
     getCommentsByArticleId, 
     postCommentByArticleId, 
-    removeCommentsByID
+    removeCommentsByID,
+    patchCommentByID
 }

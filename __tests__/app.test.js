@@ -569,3 +569,97 @@ describe("GET /api/users/:username", () => {
     })
   })
 })
+
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: Responds with the updated comment where votes are increased", () => {
+    const newVote = {
+      inc_votes: 5
+    }
+
+    return request(app)
+    .patch("/api/comments/1")
+    .send(newVote)
+    .expect(200)
+    .then(({body: {updatedComment}}) => {
+      expect(updatedComment).toMatchObject({
+        comment_id: 1,
+        article_id: expect.any(Number),
+        body: expect.any(String),
+        votes: 21,
+        author: expect.any(String),
+        created_at: expect.any(String)
+      })
+    })
+  })
+  test("200: Responds with the updated comment where votes are decreased", () => {
+    const newVote = {
+      inc_votes: -5
+    }
+
+    return request(app)
+    .patch("/api/comments/1")
+    .send(newVote)
+    .expect(200)
+    .then(({body: {updatedComment}}) => {
+      expect(updatedComment).toMatchObject({
+        comment_id: 1,
+        article_id: expect.any(Number),
+        body: expect.any(String),
+        votes: 11,
+        author: expect.any(String),
+        created_at: expect.any(String)
+      })
+    })
+  })
+  test("404: Responds with 404 when attempting to update a valid comment_id that is out of range", () => {
+    const newVote = {
+      inc_votes: -5
+    }
+
+    return request(app)
+    .patch("/api/comments/1000")
+    .send(newVote)
+    .expect(404)
+    .then(({body: {msg}})=> {
+      expect(msg).toEqual("Comment does not exist")
+    })
+  })
+  test("400: Responds with 400 when attempting to update an invalid comment_id", () => {
+    const newVote = {
+      inc_votes: -5
+    }
+
+    return request(app)
+    .patch("/api/comments/invalidCommentID")
+    .send(newVote)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+  test("400: Responds with 400 when attempting to update with a patch object with invalid data types", () => {
+    const newVote = {
+      inc_votes: "10"
+    }
+
+    return request(app)
+    .patch("/api/comments/1")
+    .send(newVote)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+  test("400: Responds with 400 when attempting to update with a patch object with missing data", () => {
+    const newVote = {
+    }
+
+    return request(app)
+    .patch("/api/comments/1")
+    .send(newVote)
+    .expect(400)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("Bad request")
+    })
+  })
+})
