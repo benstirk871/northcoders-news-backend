@@ -356,7 +356,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   })
   test("404: Responds with 404 when the provided user does not exist", () => {
     const newComment = {
-      username: "randomUsername",
+      username: "testUsername",
       body: "New comment"
     }
     return request(app)
@@ -543,6 +543,29 @@ describe("GET /api/users", () => {
           avatar_url: expect.any(String)
         })
       })
+    })
+  })
+})
+
+describe("GET /api/users/:username", () => {
+  test("200: Responds with the user object corresponding to the provided username", () => {
+    return request(app)
+    .get("/api/users/icellusedkars")
+    .expect(200)
+    .then(({body: {user}}) => {
+      expect(user).toMatchObject({
+        username: "icellusedkars",
+        name: "sam",
+        avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+      })
+    })
+  })
+  test("404: Responds with 404 when provided an username is not in the database", () => {
+    return request(app)
+    .get("/api/users/testUsername")
+    .expect(404)
+    .then(({body: {msg}}) => {
+      expect(msg).toEqual("User doesn't exist")
     })
   })
 })
