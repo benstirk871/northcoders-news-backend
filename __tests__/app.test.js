@@ -4,7 +4,7 @@ const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data")
 const app = require("../app")
 const request = require("supertest");
-const toBeSortedBy = require("jest-sorted");
+
 
 beforeEach(() => {
   return seed(data)

@@ -1,5 +1,6 @@
 const express = require("express")
 const app = express()
+const cors = require("cors")
 const endpointsJson = require("./endpoints.json")
 const getTopics = require("./controllers/topics.controller")
 const {
@@ -17,6 +18,8 @@ const {
     getUsers,
     getUsersByUsername
 } = require("./controllers/users.controller")
+
+app.use(cors())
 
 app.use(express.json())
 
