@@ -8,7 +8,7 @@ The project has two main components:
 
 2. API development
 
-## Database
+## Databases
 
 The first part of the project involved creating and seeding PostgreSQL databases. A full test suite was provided by Northcoders to ensure the seeding behavior was working correctly.
 
@@ -29,7 +29,7 @@ There is a link to the hosted vesion above. Requests can be made in the browser 
 
 If you wish to see and run the code behind this project, please follow the instructions below to clone a local version of this repository to your machine:
 
-### One - Clone the Repository
+### 1. Clone the Repository
 
 - Copy the HTTPS link available through the green <> Code button.
 - Open your terminal (CTRL ALT T) and navigate to your desired folder using `cd <filepath>`.
@@ -44,7 +44,7 @@ If you wish to see and run the code behind this project, please follow the instr
 
 Dependencies are listed in the package.json under dependencies and devDependencies.
 
-### Two - Configure .env Files
+### 2. Configure .env Files
 
 To allow for connection to the databases, two .env files are required. The file names and variables must be exactly as they are below:
 
@@ -56,7 +56,7 @@ To allow for connection to the databases, two .env files are required. The file 
 
 - The second is .env.development - Within this file create a variable `PGDATBASE=nc_news`
 
-### Three - Set Up and Seed the Databases
+### 3. Set Up and Seed the Databases
 
 - Create the databases:
   - `npm run setup-dbs`
