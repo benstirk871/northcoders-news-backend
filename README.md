@@ -14,7 +14,7 @@ The first part of the project involved creating and seeding PostgreSQL databases
 
 ## API
 
-Once the databases were set up, I used the Express framework to create an API server with a series of RESTful endpoints. These endpoints allow for CRUD (Create, Read, Update, Delete) requests to be made in the front-end application, so data can be retrieved. This project uses the MVC (Model, View, Controller) paradigm to modularise and organise the code.
+Once the databases were set up, I used the Express framework to create an API server with a series of RESTful endpoints. These endpoints allow for CRUD (Create, Read, Update, Delete) requests to be made in the front-end application. This project uses the MVC (Model, View, Controller) paradigm to modularise and organise the code.
 A full test suite was also written for the API to ensure:
 
 - Data is retrieved and manipulated correctly
