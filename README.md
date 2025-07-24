@@ -1,6 +1,6 @@
-# northcoders-news-backend
+# Northcoders News Backend (northcoders-news-backend)
 
-This project uses the Express framework to create an API server, with a series of RESTful endpoints. These endpoints allow for CRUD (Create, Read, Update, Delete) requests to be made in a front-end application.
+This is the back-end part of my Northcoders News project. This part handles the storage, organisation and availability of the required data.
 
 The project has two main components:
 
@@ -14,7 +14,7 @@ The first part of the project involved creating and seeding PostgreSQL databases
 
 ## API
 
-Once the databases were set up, I created a series of RESTful endpoints. This project uses the MVC (Model, View, Controller) paradigm to modularise and organise the code.
+Once the databases were set up, I used the Express framework to create an API server with a series of RESTful endpoints. These endpoints allow for CRUD (Create, Read, Update, Delete) requests to be made in the front-end application, so data can be retrieved. This project uses the MVC (Model, View, Controller) paradigm to modularise and organise the code.
 A full test suite was also written for the API to ensure:
 
 - Data is retrieved and manipulated correctly
@@ -36,7 +36,7 @@ If you wish to see and run the code behind this project, please follow the instr
 - Clone the repo:
   - `git clone <HTTPS link>`
 - Navigate into the repository folder:
-  - `cd northcoders-news-be`
+  - `cd northcoders-news-backend`
 - Open the project in your code editor:
   - `code .`
 - Install the required dependencies:
