@@ -29,10 +29,10 @@ There is a link to the hosted vesion above. Requests can be made in the browser 
 
 If you wish to see and run the code behind this project, please follow the instructions below to clone a local version of this repository to your machine:
 
-### Part One - Clone the Repository
+### One - Clone the Repository
 
 - Copy the HTTPS link available through the green <> Code button.
-- Open your terminal (CTRL ALT T) and navigate to your desired folder using cd <filepath>.
+- Open your terminal (CTRL ALT T) and navigate to your desired folder using `cd <filepath>`.
 - Clone the repo:
   - `git clone <HTTPS link>`
 - Navigate into the repository folder:
@@ -44,7 +44,7 @@ If you wish to see and run the code behind this project, please follow the instr
 
 Dependencies are listed in the package.json under dependencies and devDependencies.
 
-### Part two - Configure .env Files
+### Two - Configure .env Files
 
 To allow for connection to the databases, two .env files are required. The file names and variables must be exactly as they are below:
 
@@ -56,7 +56,7 @@ To allow for connection to the databases, two .env files are required. The file 
 
 - The second is .env.development - Within this file create a variable `PGDATBASE=nc_news`
 
-### Part three - Set Up and Seed the Databases
+### Three - Set Up and Seed the Databases
 
 - Create the databases:
   - `npm run setup-dbs`
