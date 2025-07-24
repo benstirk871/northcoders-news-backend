@@ -1,4 +1,4 @@
-# northcoders-news-be
+# northcoders-news-backend
 
 This project uses the Express framework to create an API server, with a series of RESTful endpoints. These endpoints allow for CRUD (Create, Read, Update, Delete) requests to be made in a front-end application.
 
@@ -72,6 +72,8 @@ To allow for connection to the databases, two .env files are required. The file 
 - This runs the listen.js file and opens the server on your local port (default: 9090).
 - You can now use API testing software, such as Insomnia or Postman to make requests to:
   - http://localhost:9090/api
+- To stop the sever connection:
+  - `CTRL C`
 
 ### Minimum Requirements
 
